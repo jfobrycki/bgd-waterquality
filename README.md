@@ -55,6 +55,10 @@ Selecting this option displays this page.
 
 There are five administrative levels listed. Level-0 corresponds to the country outline.
 
+This is the direct link for the <a href="https://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_BGD_shp.zip" target="_blank">Bangladesh shapefile zip folder</a>.
+
+
+
 
 
 
