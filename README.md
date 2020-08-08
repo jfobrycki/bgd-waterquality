@@ -57,6 +57,59 @@ There are five administrative levels listed. Level-0 corresponds to the country 
 
 This is the direct link for the <a href="https://biogeo.ucdavis.edu/data/gadm3.6/shp/gadm36_BGD_shp.zip" target="_blank">Bangladesh shapefile zip folder</a>.
 
+The zip folder is over 68 MB in size and this file size may be difficult to map all at once.
+
+```
+cd data
+ls -li
+```
+
+![Website overview](images/ZipfileSize.png)
+
+# Polygon Processing
+
+Several editing steps were needed for this original zip file.
+
+
+
+
+# Key commands used
+
+Much of the data processing was conducted using the command line. Some of the commands used are described below.
+
+```
+mkdir <name>
+```
+This command was used to create directories (folders) after the project was initialized.
+
+```
+touch index.html
+```
+This command was used to create files, such as the index.html page.
+
+
+```
+mv <oldfilename> <newfilename>
+```
+
+This command was used to rename a file within the same folder. When taking screen images, the image files were automatically named by the computer. These files were renamed using the mv command.
+
+```
+ls -li
+```
+
+This command was used to list the contents of folders.
+
+
+```
+git status
+git add <filenames>
+git commit -m "description of what is being added"
+git push
+```
+
+This series of commands was used to upload edits to the remote repository. The git status command provided an updated on which files were being tracked and which ones needed to be tracked. If files needed to be tracked so that they could be uploaded to the remote repository, the git add command was run, using either one or multiple file or folder names. Then the git commit command was run, and a message was included to indicate what kind of update was occurring. Finally, the git push command pushed all these updates to the remote repository.
+
 
 
 
