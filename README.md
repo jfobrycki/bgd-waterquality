@@ -20,7 +20,7 @@ The BGS website has lots of maps and information about the dataset. The goal for
 
 The dataset needs to be edited before loading into a map. The original csv file has some very helpful metadata information that we can move out of the document.
 
-![Website overview](images/DatasetExample.png)
+![Original dataset](images/DatasetExample.png)
 
 The dataset information in the header is:
 
@@ -33,7 +33,7 @@ Release date: 25 May 2000
 
 We can also reduce the spacing between the column headers and the dataset.
 
-![Website overview](images/EditedDatasetExample.png)
+![Edited dataset](images/EditedDatasetExample.png)
 
 These changes were made in a spreadsheet application and were not made using a command line approach. 
 
@@ -47,11 +47,11 @@ This dataset does have latitude and longitude data already available (in WGS 84)
 
 The site <a href="https://gadm.org" target="_blank">GADM</a> has administrative unit polygons available for countries. Navigating to the data <a href="https://gadm.org/download_country_v3.html" target="_blank">download page</a> provides access to the Bangladesh dataset.
 
-![Website overview](images/GADM_Menu.png)
+![GADM menu](images/GADM_Menu.png)
 
 Selecting this option displays this page.
 
-![Website overview](images/GADM_Bangladesh.png)
+![GAM Bangladesh overview page](images/GADM_Bangladesh.png)
 
 There are five administrative levels listed. Level-0 corresponds to the country outline.
 
@@ -59,17 +59,34 @@ This is the direct link for the <a href="https://biogeo.ucdavis.edu/data/gadm3.6
 
 The zip folder is over 68 MB in size and this file size may be difficult to map all at once.
 
-```
-cd data
-ls -li
-```
 
-![Website overview](images/ZipfileSize.png)
+![Zipfile](images/ZipfileSize.png)
 
 # Polygon Processing
 
 Several editing steps were needed for this original zip file.
 
+Within the data directory, the file needs to be unzipped. A new directory needs to be created, and all the unzipped files need to be stored in this new folder.
+
+```
+unzip gadm36_BGD_shp.zip
+mkdir gadm36_BGD_shp
+mv gadm36_BGD_0* gadm36_BGD_shp
+mv gadm36_BGD_1* gadm36_BGD_shp
+mv gadm36_BGD_2* gadm36_BGD_shp
+mv gadm36_BGD_3* gadm36_BGD_shp
+mv gadm36_BGD_4* gadm36_BGD_shp
+```
+
+Within this new folder, the file sizes of these shp files vary.
+
+```
+-ls li *.shp
+```
+
+As the administrative unit becomes more specific, the polygons become more complex and the file size increases.
+
+![File sizes](images/FourFiles.png)
 
 
 
@@ -98,7 +115,14 @@ This command was used to rename a file within the same folder. When taking scree
 ls -li
 ```
 
-This command was used to list the contents of folders.
+This command was used to list the contents of folders and information about file sizes.
+
+```
+cd data
+cd ..
+```
+
+This command was used to change the working directory. For example, moving into the data directory or if .. is used, moving up the directory one level.
 
 
 ```
