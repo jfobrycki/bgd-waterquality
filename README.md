@@ -302,11 +302,15 @@ function writeOutputFile(outputData) {
 
 The json files were created correctly from the original csv and shp files, as a preliminary map shows the districts and all the mapped sampling locations.
 
-![All districts in legend](images/AllPointsLoaded.png)
+![All point loaded](images/AllPointsLoaded.png)
 
 After some initial editing to the html file, the number of districts seemed to be too many for mapping on the right side legend.
 
-![All districts in legend](images/ExampleMapWithAllDistricts.png)
+![Example map with all districts](images/ExampleMapWithAllDistricts.png)
+
+Another option would be to have the districts color coded by the number of water samples collected in each district.
+
+![All districts in legend](images/SamplesByDistrict.png)
 
 
 # Key commands used

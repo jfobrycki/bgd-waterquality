@@ -144,7 +144,7 @@
         },
         onEachFeature(feature, layer) {
           // select each legend list item span and append the total count of signals
-          $('#district-' + feature.properties.districtNum + ' span').append(feature.properties.count);
+          $('#district-' + feature.properties.NAME + ' span').append(feature.properties.count);
 
           //when mousing over a polygon layer
           layer.on('mouseover', function () {
