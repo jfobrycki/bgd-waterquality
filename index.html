@@ -138,7 +138,7 @@
         style: function (feature) {
           // use the colors object to style each polygon a unique color
           return {
-            color: colors.Temps[7][feature.properties.count - 1],
+            fillColor: getColor(feature.properties.count),
             fillOpacity: .6
           }
         },
@@ -216,6 +216,21 @@
       // add the markerClusterGroup to the map
       map.addLayer(markers);
 
+
+
+      function getColor(d) {
+    return d > 2000 ? colors.Temps[7][1] :
+           //d > 50  ? colors.Temps[7][2] :
+           d > 100  ? colors.Temps[7][3] :
+           //d > 100  ? colors.Temps[7][4] :
+           d > 50  ? colors.Temps[7][5] :
+           //d > 20   ? colors.Temps[7][6] :
+           d > 10   ? colors.Temps[7][7] :
+                      '#FFEDA0';
+}
+
+console.log(colors.Temps[7])
+console.log(colors.Temps[7][1])
 
     } //this is the end of the draw map data function, this bracket needs to be outside the create a layergroup command for the districts to be defined
 
