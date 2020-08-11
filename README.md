@@ -88,7 +88,173 @@ As the administrative unit becomes more specific, the polygons become more compl
 
 ![File sizes](images/FourFiles.png)
 
+The selected option to try is the BGD_2 which contains the polygons for districts in Bangladesh. There are 64 districts.
 
+
+# Creating scripts
+
+To convert the csv file to a geojson, a new script was created using csv2geojson.
+
+```
+npm install csv2geojson
+touch csv2geojson.js
+```
+
+Then the csv2geojson.js code was entered
+
+```javascript
+ "use strict"
+
+var fs = require('fs');
+var csv2geojson = require('csv2geojson')
+
+// read file as string
+fs.readFile('../data/NationalSurveyData_MapFormat.csv', 'utf-8', (err, csvString) => {
+
+    if(err) throw err;
+
+    // convert to GeoJSON
+    csv2geojson.csv2geojson(csvString, {
+        latfield: 'LAT_DEG',
+        lonfield: 'LONG_DEG',
+        delimiter: ','
+    }, (err, geojson) => {
+    
+        if(err) throw err;
+
+        console.log(geojson); // this is our geojson!
+        
+        // write file
+        fs.writeFile('../data/NationalSurveyData_MapFormat.json', JSON.stringify(geojson), 'utf-8', (err) => {
+            
+            if(err) throw err;
+            
+            console.log('done writing file');
+        });
+    })
+});
+```
+
+Then another script was attempted to be built to convert the BGD_2 shapefile to a json.
+
+This attempt was called shptojson.js
+
+The code was
+
+```javascript
+"use strict"
+
+var mapshaper = require('mapshaper')
+
+mapshaper data/gadm36_BGD_shp/gadm36_BGD_2.shp -simplify dp 20% -o format=geojson data/gadm36_BGD_shp/gadm36_BGD_2.json
+```
+
+But running the code in the command line resulted in the .shp file being converted to a json.
+
+```
+mapshaper data/gadm36_BGD_shp/gadm36_BGD_2.shp -simplify dp 20% -o format=geojson data/gadm36_BGD_shp/gadm36_BGD_2.json
+```
+
+Then I installed
+
+```
+npm install csv-parse
+```
+
+And created a new script to run
+
+```
+bind-data-js.js
+```
+
+The data row names was checked using ogrinfo and mapshaper.
+
+```
+ogrinfo gadm36_BGD_shp/gadm36_BGD_2.shp gadm36_BGD_2 -so
+```
+
+![OGR info](images/ogrinfoExample.png)
+
+```
+mapshaper gadm36_BGD_shp/gadm36_BGD_2.shp -info
+```
+
+![mapshaper](images/MapshaperInfo.png)
+
+
+
+Then the bind-data-js script was prepared
+
+```javascript
+import fs from 'fs';
+import csvParse from 'csv-parse';
+
+// request first file
+fs.readFile('../data/gadm36_BGD_shp/gadm36_BGD_2.json', 'utf8', (err, geojson) => {
+  
+  if (err) throw err;
+  // nested call for the second (could use Promise or async solution)
+  fs.readFile('../data/NationalSurveyData_MapFormat.csv', 'utf8', (err, csvString) => {
+    
+    if (err) throw err; // stop the script if error
+
+    // parse the CSV file from text to array of objects
+    csvParse(csvString, {
+      columns: true
+    }, (err, csvData) => {
+      
+      bindData(JSON.parse(geojson), csvData);
+
+    });
+  })
+});
+
+function bindData(geojson, csvData) {
+
+  // loop through the features
+  geojson.features.forEach((feature) => {
+
+    // set a variable to 0
+    let count = 0;
+
+    // loop through the array of CSV data objects
+    csvData.forEach((row) => {
+
+      // if IDs match
+      if (feature.properties.NAME_2 === row.DISTRICT) {
+        // increment the count for that feature
+        count++
+      }
+
+    });
+
+    // when done looping, add the count as a feature property
+    feature.properties.count = count;
+
+  });
+
+  // done with data bind
+  writeFile(geojson);
+
+}
+
+function writeFile(geojson) {
+
+  fs.writeFile('../data/BGD-districts-counts.json', JSON.stringify(geojson), 'utf8', function (err) {
+
+    if (err) throw err;
+
+    console.log('File all done. Great success!');
+  })
+
+}
+
+```
+
+This code was run using the following command
+```
+node bind-data-js
+```
 
 # Key commands used
 
@@ -136,7 +302,7 @@ This series of commands was used to upload edits to the remote repository. The g
 
 
 
-
+redo the edits and changes
 
 
 

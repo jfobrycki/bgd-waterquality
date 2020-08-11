@@ -63,8 +63,8 @@
   <div id="map"></div>
 
   <div id="ui">
-    <h3>Sampled Wells</h3>
-    <h4>(number of traffic signals)</h4>
+    <h3>Number of Sampled Wells</h3>
+    <h4>By District</h4>
     <ul id="legend-list"></ul>
   </div>
 
@@ -138,7 +138,7 @@
         style: function (feature) {
           // use the colors object to style each polygon a unique color
           return {
-            color: colors.Temps[7][feature.properties.districtNum - 1],
+            color: colors.Temps[7][feature.properties.count - 1],
             fillOpacity: .6
           }
         },
@@ -151,7 +151,8 @@
             // provide a visual affordance
             this.setStyle({
               fillOpacity: .8
-            });
+            }),
+            layer.bindPopup(feature.properties.NAME_2 + "<br>" + "Number of samples " + feature.properties.count);
             // select the cooresponding list item
             // and add the highlight class to make bold
             $('#district-' + feature.properties.districtNum).addClass('highlight');
