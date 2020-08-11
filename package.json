@@ -1,0 +1,27 @@
+{
+  "name": "bgd-waterquality",
+  "version": "1.0.0",
+  "description": "# Overview",
+  "main": "app.js",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "csv-parse": "^4.12.0",
+    "csv2geojson": "^5.1.1",
+    "mapshaper": "^0.5.14"
+  },
+  "type": "module",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jfobrycki/bgd-waterquality.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jfobrycki/bgd-waterquality/issues"
+  },
+  "homepage": "https://github.com/jfobrycki/bgd-waterquality#readme"
+}
