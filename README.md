@@ -91,16 +91,17 @@ As the administrative unit becomes more specific, the polygons become more compl
 The selected option to try is the BGD_2 which contains the polygons for districts in Bangladesh. There are 64 districts.
 
 
-# Creating scripts
+# Converting to json
 
 To convert the csv file to a geojson, a new script was created using csv2geojson.
 
 ```
 npm install csv2geojson
 touch csv2geojson.js
+node csv2geojson.js
 ```
 
-Then the csv2geojson.js code was entered
+The node command was run after the following script was created. Note that the newly formatted csv file is used with the column names taking up one row. The latitude and longitude information is stored in the LAT_DEG and LONG_DEG fields. The file is written out as a .json file.
 
 ```javascript
  "use strict"
@@ -135,11 +136,11 @@ fs.readFile('../data/NationalSurveyData_MapFormat.csv', 'utf-8', (err, csvString
 });
 ```
 
-Then another script was attempted to be built to convert the BGD_2 shapefile to a json.
+How about converting the newly extracted .shp file to a .json? Another script attempted to process this using node, but instead a command line solution was used.
 
-This attempt was called shptojson.js
+For an attempt using node, a new script was created called shptojson.js.
 
-The code was
+The code was as follows:
 
 ```javascript
 "use strict"
@@ -149,25 +150,32 @@ var mapshaper = require('mapshaper')
 mapshaper data/gadm36_BGD_shp/gadm36_BGD_2.shp -simplify dp 20% -o format=geojson data/gadm36_BGD_shp/gadm36_BGD_2.json
 ```
 
-But running the code in the command line resulted in the .shp file being converted to a json.
+After getting some error messages, the command was moved to the command line to process the shp data to a json.
+
 
 ```
 mapshaper data/gadm36_BGD_shp/gadm36_BGD_2.shp -simplify dp 20% -o format=geojson data/gadm36_BGD_shp/gadm36_BGD_2.json
 ```
 
-Then I installed
+The end result is two new .json files that can be mapped. The csv file and the BGD_2 shp file (district level) have been successfully converted to .json files and can now be mapped.
+
+# Creating counts
+
+With the two newly created .json files, additional modifications can be processed where we count the number of sampled boreholes within each district. These steps require some additional npm packages and scripts.
+
+First, the csv-parse package was downloaded.
 
 ```
 npm install csv-parse
 ```
 
-And created a new script to run
+Next, a new script was created.
 
 ```
-bind-data-js.js
+touch bind-data-js.js
 ```
 
-The data row names was checked using ogrinfo and mapshaper.
+But which columns in the dataset provide the correct information for counting? The data row names were checked using ogrinfo and mapshaper. Note the NAME_2 column, this is the column that corresponds to the district name.
 
 ```
 ogrinfo gadm36_BGD_shp/gadm36_BGD_2.shp gadm36_BGD_2 -so
@@ -175,15 +183,22 @@ ogrinfo gadm36_BGD_shp/gadm36_BGD_2.shp gadm36_BGD_2 -so
 
 ![OGR info](images/ogrinfoExample.png)
 
+This information is also checked using mapshaper. A benefit of using mapshaper is you can see the first value of the NAME_2 column which is a district name.
+
 ```
 mapshaper gadm36_BGD_shp/gadm36_BGD_2.shp -info
 ```
 
 ![mapshaper](images/MapshaperInfo.png)
 
+Remember back to the edited csv file. The district name is included in a column named District.
+
+![Edited dataset](images/EditedDatasetExample.png)
 
 
-Then the bind-data-js script was prepared
+The two key columns that can be used for counting the number of sampled boreholes is NAME_2 for the .json and District for the .csv file.
+
+This information was entered into the bind-data-js script.
 
 ```javascript
 import fs from 'fs';
@@ -256,7 +271,13 @@ This code was run using the following command
 node bind-data-js
 ```
 
-Additionally, code was run to select out a color palette for the map. The selected color palette was called Temps.
+The result was a count of the number of boreholes sampled per district added as a new variable named count.
+
+# Mapping colors
+
+Additionally, code was run to select out a color palette for the map. From the originally provided cartocolors.json file, the selected color palette was called Temps.
+
+A new js file was created colorselection.js and within this file the following code was entered. The result of running this code was creating a new .json file called tempscolors.json. This file contained the color palette used in the map.
 
 ```javascript
 // import the modules
@@ -298,6 +319,20 @@ function writeOutputFile(outputData) {
 }
 ```
 
+```
+node colorselection.js
+```
+
+# Mapping components summary
+
+After the steps outlined above, the following .json files were available for mapping.
+
+* data/BGD-districts-counts.json
+* data/tempscolors.json
+* data/NationalSurveyData_MapFormat.json
+
+These files contains the counts of sampled boreholes by district, the color palette used, and the point data for sampled boreholes. Note, a jquery error was encountered with the NAME_2 field in the BGD_districts-counts.json. A district is named Cox's Bazar, and it seemed the apostrophe s was causing jquery to throw an error. Temporarily renaming to Coxs Bazar allowed the map to load, but didn't address the issue of an apostrophe in a district name.
+
 # Initial mapping examples
 
 The json files were created correctly from the original csv and shp files, as a preliminary map shows the districts and all the mapped sampling locations.
@@ -308,14 +343,23 @@ After some initial editing to the html file, the number of districts seemed to b
 
 ![Example map with all districts](images/ExampleMapWithAllDistricts.png)
 
-Another option would be to have the districts color coded by the number of water samples collected in each district.
+Another option would be to have the districts color coded by the number of water samples collected in each district. A dropdown menu could be added with the district names so that they could be viewed individually rather than in one larger list.
 
 ![All districts in legend](images/SamplesByDistrict.png)
+
+Additional features were added to the map, including the number of boreholes sampled per district as a popup.
+
+![District samples](images/ExampleDistrictInfo.png)
+
+The test results for water arsenic concentration for each borehole were also indicated with the borehole depth.
+
+![District samples](images/ExampleBoreholeInfo.png)
 
 
 # Key commands used
 
-Much of the data processing was conducted using the command line. Some of the commands used are described below.
+In addition to the commands noted above, some additional commands that were useful during the data processing are noted here too. 
+
 
 ```
 mkdir <name>
@@ -356,11 +400,3 @@ git push
 ```
 
 This series of commands was used to upload edits to the remote repository. The git status command provided an updated on which files were being tracked and which ones needed to be tracked. If files needed to be tracked so that they could be uploaded to the remote repository, the git add command was run, using either one or multiple file or folder names. Then the git commit command was run, and a message was included to indicate what kind of update was occurring. Finally, the git push command pushed all these updates to the remote repository.
-
-
-
-redo the edits and changes
-
-
-
-
