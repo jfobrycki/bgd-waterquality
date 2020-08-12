@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="libs/Leaflet.markercluster/MarkerCluster.Default.css"> />
   <link rel="stylesheet" href="libs/Leaflet.markercluster/MarkerCluster.css"> />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+
   <style>
     body {
       font-family: sans-serif;
@@ -55,13 +56,47 @@
     .highlight {
       font-weight: bold;
     }
+
+    h1 {
+      position: absolute;
+      z-index: 650;
+      top: 10px;
+      left: 50px;
+      padding: 8px 15px;
+      margin: 0;
+      color: whitesmoke;
+      font-size: 1.5em;
+      background: rgba(25, 25, 25, 0.8);
+      border-radius: 5px;
+    }
+
+    p {
+      position: absolute;
+      z-index: 650;
+      top: 500px;
+      left: 50px;
+      padding: 8px 15px;
+      margin: 0;
+      color: whitesmoke;
+      font-size: 1em;
+      background: rgba(25, 25, 25, 0.8);
+      border-radius: 5px;
+    }
+
+    a:link {
+      color: whitesmoke;
+    }
   </style>
 </head>
 
 <body>
-
+  <h1>Bangladesh Water Sample Locations</h1>
   <div id="map"></div>
-
+  <p>Data from the <a href="http://www.bgs.ac.uk/research/groundwater/health/arsenic/Bangladesh/data.html"
+      target="_blank">British Geological Survey</a><br>Basemap from <a href="https://gadm.org/download_country_v3.html"
+      target=_blank">GADM</a><br>Full code and map details on <a href="https://github.com/jfobrycki/bgd-waterquality">GitHub</a><br>
+      Initial map made August 2020<br>MAP 675 in <a href="https://newmapsplus.as.uky.edu/">New Maps Plus program</a>
+  </p>
   <div id="ui">
     <h3>Number of Sampled Wells</h3>
     <h4>By District</h4>
@@ -80,7 +115,7 @@
   <script>
     // map options
     const options = {
-      center: [23.5, 90],
+      center: [23.9, 90],
       zoom: 7
     }
     // instantiate Leaflet map
@@ -207,9 +242,9 @@
       function getColor(d) {
         return d > 2000 ? colors.Temps[7][1] :
           d > 100 ? colors.Temps[7][3] :
-          d > 50 ? colors.Temps[7][5] :
-          d > 10 ? colors.Temps[7][7] :
-          colors.Temps[7][2];
+            d > 50 ? colors.Temps[7][5] :
+              d > 10 ? colors.Temps[7][7] :
+                colors.Temps[7][2];
       }
 
       //console.log(colors.Temps[7])
