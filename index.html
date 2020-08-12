@@ -80,9 +80,6 @@
   <script>
     // map options
     const options = {
-      //center: [37.265, -94.04],
-      //zoom: 4
-      //update the map center
       center: [23.5, 90],
       zoom: 7
     }
@@ -95,11 +92,6 @@
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy;<a href="https://carto.com/attribution">CARTO</a>'
     }).addTo(map);
 
-    // remove the previous request for all US counties
-    // d3.json('data/us-counties.json').then((data) => {
-    //   L.geoJson(data).addTo(map)
-    // });
-
     // use D3 fetch to request data with async requests
     const districtsData = d3.json('data/BGD-districts-counts.json');
     const colorsData = d3.json('data/tempscolors.json');
@@ -107,7 +99,6 @@
 
     // use Promise to wait until data is all loaded
     Promise.all([districtsData, colorsData, waterData]).then(drawMap);
-//colorsData
 
     function drawMap(data) {
       // function is called when Promise is fulfilled and data is ready
@@ -121,8 +112,6 @@
       const water = data[2];
 
       L.geoJson(districts).addTo(map);
-      //All points do show up if the command below is uncommented
-      //L.geoJson(water).addTo(map);
 
       // // store a reference to the HTML list
       const legendList = $('#legend-list');
@@ -130,7 +119,7 @@
       // loop through the features and create a new
       // list item for each feature in the legend
       for (let i = 1; i <= districts.features.length; i++) {
-       // legendList.append('<li class="legend-item" id="district-' + i + '"><a style="color:' + colors.Temps[7][i - 1] + '" href="#">District ' + i + " " + districts.features[i].properties.NAME_2 + " " + `(` + districts.features[i].properties.count + `)` + ' (<span></span>)</a></li>');
+        // legendList.append('<li class="legend-item" id="district-' + i + '"><a style="color:' + colors.Temps[7][i - 1] + '" href="#">District ' + i + " " + districts.features[i].properties.NAME_2 + " " + `(` + districts.features[i].properties.count + `)` + ' (<span></span>)</a></li>');
       }
 
       //create a layerGroup with the geojson data
@@ -152,7 +141,7 @@
             this.setStyle({
               fillOpacity: .8
             }),
-            layer.bindTooltip(feature.properties["NAME_2"] + "<br>" + "Number of samples " + feature.properties.count);
+              layer.bindTooltip(feature.properties["NAME_2"] + "<br>" + "Number of samples " + feature.properties.count);
             // select the cooresponding list item
             // and add the highlight class to make bold
             $('#district-' + feature.properties["NAME_2"]).addClass('highlight');
@@ -194,9 +183,6 @@
         });
       }
 
-
-
-      //L.geoJson(signals).addTo(map);
       // create new markerClusterGroup
       const markers = L.markerClusterGroup();
 
@@ -216,21 +202,18 @@
       // add the markerClusterGroup to the map
       map.addLayer(markers);
 
-
-
+      //adding in the getColor option to test out a way for still visualizing the differences in the number of sampled boreholes by district
+      //using the Temps color palette that was selected for the map
       function getColor(d) {
-    return d > 2000 ? colors.Temps[7][1] :
-           //d > 50  ? colors.Temps[7][2] :
-           d > 100  ? colors.Temps[7][3] :
-           //d > 100  ? colors.Temps[7][4] :
-           d > 50  ? colors.Temps[7][5] :
-           //d > 20   ? colors.Temps[7][6] :
-           d > 10   ? colors.Temps[7][7] :
-                      '#FFEDA0';
-}
+        return d > 2000 ? colors.Temps[7][1] :
+          d > 100 ? colors.Temps[7][3] :
+          d > 50 ? colors.Temps[7][5] :
+          d > 10 ? colors.Temps[7][7] :
+          colors.Temps[7][2];
+      }
 
-console.log(colors.Temps[7])
-console.log(colors.Temps[7][1])
+      //console.log(colors.Temps[7])
+      //console.log(colors.Temps[7][1])
 
     } //this is the end of the draw map data function, this bracket needs to be outside the create a layergroup command for the districts to be defined
 
