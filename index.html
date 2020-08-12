@@ -130,7 +130,7 @@
       // loop through the features and create a new
       // list item for each feature in the legend
       for (let i = 1; i <= districts.features.length; i++) {
-        legendList.append('<li class="legend-item" id="district-' + i + '"><a style="color:' + colors.Temps[7][i - 1] + '" href="#">District ' + i + ' (<span></span>)</a></li>');
+       // legendList.append('<li class="legend-item" id="district-' + i + '"><a style="color:' + colors.Temps[7][i - 1] + '" href="#">District ' + i + " " + districts.features[i].properties.NAME_2 + " " + `(` + districts.features[i].properties.count + `)` + ' (<span></span>)</a></li>');
       }
 
       //create a layerGroup with the geojson data
@@ -143,8 +143,8 @@
           }
         },
         onEachFeature(feature, layer) {
-          // select each legend list item span and append the total count of signals
-          $('#district-' + feature.properties.NAME + ' span').append(feature.properties.count);
+          // select each legend list item span and append the total count of sampled wells
+          $('#district-' + feature.properties["NAME_2"] + ' span').append(feature.properties.count);
 
           //when mousing over a polygon layer
           layer.on('mouseover', function () {
@@ -155,7 +155,7 @@
             layer.bindPopup(feature.properties.NAME_2 + "<br>" + "Number of samples " + feature.properties.count);
             // select the cooresponding list item
             // and add the highlight class to make bold
-            $('#district-' + feature.properties.districtNum).addClass('highlight');
+            $('#district-' + feature.properties.NAME_2).addClass('highlight');
           });
           layer.on('mouseout', function () {
             // provide a visual affordance
@@ -176,11 +176,11 @@
         highlightDistrict(num);
       });
 
-      function highlightDistrict(districtNum) {
+      function highlightDistrict(num) {
         // loop through the districts polygons
         districtsLayerGroup.eachLayer(function (layer) {
           // if the district id matches the one we're mousing over
-          if (layer.feature.properties.TYPE_2 === districtNum) {
+          if (layer.feature.properties.TYPE_2 === num) {
             // change the layer style
             layer.setStyle({
               fillOpacity: .8
