@@ -152,10 +152,10 @@
             this.setStyle({
               fillOpacity: .8
             }),
-            layer.bindPopup(feature.properties.NAME_2 + "<br>" + "Number of samples " + feature.properties.count);
+            layer.bindTooltip(feature.properties["NAME_2"] + "<br>" + "Number of samples " + feature.properties.count);
             // select the cooresponding list item
             // and add the highlight class to make bold
-            $('#district-' + feature.properties.NAME_2).addClass('highlight');
+            $('#district-' + feature.properties["NAME_2"]).addClass('highlight');
           });
           layer.on('mouseout', function () {
             // provide a visual affordance
