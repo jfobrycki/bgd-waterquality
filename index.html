@@ -30,10 +30,13 @@
       position: absolute;
       z-index: 1000;
       /* place above map */
-      bottom: 30px;
+      bottom: 250px;
       right: 18px;
-      padding: 6px 12px;
-      background: rgba(256, 256, 256, .9);
+      padding: 6px 6px;
+      color: whitesmoke;
+      font-size: 1em;
+      background: rgba(25, 25, 25, 0.8);
+      border-radius: 5px;
     }
 
     #ui ul {
@@ -86,6 +89,38 @@
     a.class1:link {
       color: whitesmoke;
     }
+
+    .legend {
+      line-height: 36px;
+    color: whitesmoke;
+    background: rgba(25, 25, 25, 0.8);
+    font-size: 1.5em;
+    padding: 8px 15px;
+    border-radius: 5px;
+       /* z-index: 1000; */
+      /* place above map */      
+      /*width: 200 px;  */
+}
+.legend i {
+  z-index: 1000;
+  width: 36px;
+    height: 36px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.7;
+  /* position: absolute;
+      z-index: 1000;
+      /* place above map */
+      /* float: left;
+      margin-right: 8 px;
+      width: 25px;
+      height: 25px;
+      color: whitesmoke;
+      font-size: 1em;
+      background: rgba(25, 25, 25, 0.8);
+      border-radius: 5px; */
+}
+
   </style>
 </head>
 
@@ -93,9 +128,11 @@
   <h1>Bangladesh Water Sample Locations</h1>
   <div id="map"></div>
   <p>Data from the <a href="http://www.bgs.ac.uk/research/groundwater/health/arsenic/Bangladesh/data.html"
-      target="_blank" class="class1">British Geological Survey</a><br>Basemap from <a href="https://gadm.org/download_country_v3.html"
-      target="_blank" class="class1">GADM</a><br>Full code and map details on <a href="https://github.com/jfobrycki/bgd-waterquality" target="_blank" class="class1">GitHub</a><br>
-      Initial map made August 2020<br>MAP 675 in <a href="https://newmapsplus.as.uky.edu/" target="_blank" class="class1">New Maps Plus program</a>
+      target="_blank" class="class1">British Geological Survey</a><br>Basemap from <a
+      href="https://gadm.org/download_country_v3.html" target="_blank" class="class1">GADM</a><br>Full code and map
+    details on <a href="https://github.com/jfobrycki/bgd-waterquality" target="_blank" class="class1">GitHub</a><br>
+    Initial map made August 2020<br>MAP 675 in <a href="https://newmapsplus.as.uky.edu/" target="_blank"
+      class="class1">New Maps Plus program</a>
   </p>
   <div id="ui">
     <h3>Number of Sampled Wells</h3>
@@ -149,13 +186,43 @@
       L.geoJson(districts).addTo(map);
 
       // // store a reference to the HTML list
-      const legendList = $('#legend-list');
+      // const legendList = $('#legend-list');
 
-      // loop through the features and create a new
-      // list item for each feature in the legend
-      for (let i = 1; i <= districts.features.length; i++) {
-        // legendList.append('<li class="legend-item" id="district-' + i + '"><a style="color:' + colors.Temps[7][i - 1] + '" href="#">District ' + i + " " + districts.features[i].properties.NAME_2 + " " + `(` + districts.features[i].properties.count + `)` + ' (<span></span>)</a></li>');
-      }
+      // const grades = [0, 10, 50, 100, 2000]
+      // const labels = [];
+      // // loop through the features and create a new
+      // // list item for each feature in the legend
+      // for (let i = 1; i <= grades.length; i++) {
+      //   // legendList.append('<li class="legend-item" id="district-' + i + '"><a style="color:' + colors.Temps[7][i - 1] + '" href="#">District ' + i + " " + districts.features[i].properties.NAME_2 + " " + `(` + districts.features[i].properties.count + `)` + ' (<span></span>)</a></li>');
+      //   legendList.append('<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+'));
+      // }
+
+
+      var legend = L.control({ position: 'bottomright' });
+
+      legend.onAdd = function (map) {
+
+        var div = L.DomUtil.create('div', 'info legend'),
+          grades = [0, 10, 50, 100, 200],
+          labels = [];
+
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < grades.length; i++) {
+          div.innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
+
+        return div;
+      };
+
+      legend.addTo(map);
+
+
+
+
+
+
 
       //create a layerGroup with the geojson data
       const districtsLayerGroup = L.geoJson(districts, {
@@ -163,7 +230,8 @@
           // use the colors object to style each polygon a unique color
           return {
             fillColor: getColor(feature.properties.count),
-            fillOpacity: .6
+            fillOpacity: .8,
+            color: "#A19D98"
           }
         },
         onEachFeature(feature, layer) {
@@ -174,7 +242,7 @@
           layer.on('mouseover', function () {
             // provide a visual affordance
             this.setStyle({
-              fillOpacity: .8
+              fillOpacity: 1
             }),
               layer.bindTooltip(feature.properties["NAME_2"] + "<br>" + "Number of samples " + feature.properties.count);
             // select the cooresponding list item
@@ -184,7 +252,7 @@
           layer.on('mouseout', function () {
             // provide a visual affordance
             this.setStyle({
-              fillOpacity: .6
+              fillOpacity: .8
             });
           });
 
@@ -204,7 +272,7 @@
         // loop through the districts polygons
         districtsLayerGroup.eachLayer(function (layer) {
           // if the district id matches the one we're mousing over
-          if (layer.feature.properties.TYPE_2 === num) {
+          if (layer.feature.properties.NAME_2 === num) {
             // change the layer style
             layer.setStyle({
               fillOpacity: .8
@@ -240,10 +308,10 @@
       //adding in the getColor option to test out a way for still visualizing the differences in the number of sampled boreholes by district
       //using the Temps color palette that was selected for the map
       function getColor(d) {
-        return d > 2000 ? colors.Temps[7][1] :
+        return d > 200 ? colors.Temps[7][1] :
           d > 100 ? colors.Temps[7][3] :
             d > 50 ? colors.Temps[7][5] :
-              d > 10 ? colors.Temps[7][7] :
+              d > 10 ? colors.Temps[7][4] :
                 colors.Temps[7][2];
       }
 
