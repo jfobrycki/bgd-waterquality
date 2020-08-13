@@ -259,32 +259,32 @@
         }
       }).addTo(map);
 
-      // select all the list items and on mouseover
-      $('.legend-item').on('mouseover', function () {
-        // extract the specific number from the specific item
-        // being moused over
-        var num = this.id.replace('district-', '');
-        // send this number as an argument to the highlightDistrict function
-        highlightDistrict(num);
-      });
+      // // select all the list items and on mouseover
+      // $('.legend-item').on('mouseover', function () {
+      //   // extract the specific number from the specific item
+      //   // being moused over
+      //   var num = this.id.replace('district-', '');
+      //   // send this number as an argument to the highlightDistrict function
+      //   highlightDistrict(num);
+      // });
 
-      function highlightDistrict(num) {
-        // loop through the districts polygons
-        districtsLayerGroup.eachLayer(function (layer) {
-          // if the district id matches the one we're mousing over
-          if (layer.feature.properties.NAME_2 === num) {
-            // change the layer style
-            layer.setStyle({
-              fillOpacity: .8
-            }).bringToFront();
-          } else {
-            // return to original
-            layer.setStyle({
-              fillOpacity: .6
-            });
-          }
-        });
-      }
+      // function highlightDistrict(num) {
+      //   // loop through the districts polygons
+      //   districtsLayerGroup.eachLayer(function (layer) {
+      //     // if the district id matches the one we're mousing over
+      //     if (layer.feature.properties.NAME_2 === num) {
+      //       // change the layer style
+      //       layer.setStyle({
+      //         fillOpacity: .8
+      //       }).bringToFront();
+      //     } else {
+      //       // return to original
+      //       layer.setStyle({
+      //         fillOpacity: .6
+      //       });
+      //     }
+      //   });
+      // }
 
       // create new markerClusterGroup
       const markers = L.markerClusterGroup();
