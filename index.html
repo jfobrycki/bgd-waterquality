@@ -25,34 +25,8 @@
       bottom: 0;
     }
 
-    #ui {
-      position: absolute;
-      z-index: 1000;
-      /* place above map */
-      bottom: 250px;
-      right: 18px;
-      padding: 6px 6px;
-      color: whitesmoke;
-      font-size: 1em;
-      background: rgba(25, 25, 25, 0.8);
-      border-radius: 5px;
-    }
-
-    #ui ul {
-      list-style-type: none;
-      padding: 0;
-    }
-
-    #ui li {
-      margin-bottom: 6px;
-    }
-
-    #ui a {
-      text-decoration: none;
-    }
-
-    #ui a:hover {
-      font-weight: bold;
+    a:visited {
+      color: white;
     }
 
     .highlight {
@@ -72,17 +46,24 @@
       border-radius: 5px;
     }
 
-    p {
+   #meta {
       position: absolute;
       z-index: 650;
-      top: 500px;
-      left: 50px;
+      bottom: 18px;
+      left: 18px;
       padding: 8px 15px;
       margin: 0;
       color: whitesmoke;
       font-size: 1em;
       background: rgba(25, 25, 25, 0.8);
       border-radius: 5px;
+    }
+    #meta ul {
+      padding-left: 0;
+    }
+    #meta li {
+      margin-bottom: 8px;
+      list-style-type: none;
     }
 
     a.class1:link {
@@ -114,18 +95,8 @@
     float: left;
     margin-right: 8px;
     opacity: 0.7;
-  /* position: absolute;
-      z-index: 1000;
-      /* place above map */
-      /* float: left;
-      margin-right: 8 px;
-      width: 25px;
-      height: 25px;
-      color: whitesmoke;
-      font-size: 1em;
-      background: rgba(25, 25, 25, 0.8);
-      border-radius: 5px; */
 }
+
 
   </style>
 </head>
@@ -133,13 +104,16 @@
 <body>
   <h1>Bangladesh Water Sample Locations</h1>
   <div id="map"></div>
-  <p>Data from the <a href="http://www.bgs.ac.uk/research/groundwater/health/arsenic/Bangladesh/data.html"
-      target="_blank" class="class1">British Geological Survey</a><br>Basemap from <a
-      href="https://gadm.org/download_country_v3.html" target="_blank" class="class1">GADM</a><br>Full code and map
-    details on <a href="https://github.com/jfobrycki/bgd-waterquality" target="_blank" class="class1">GitHub</a><br>
-    Initial map made August 2020<br>MAP 675 in <a href="https://newmapsplus.as.uky.edu/" target="_blank"
-      class="class1">New Maps Plus program</a>
-  </p>
+  <div id="meta">
+    <ul>
+      <li>Data from the <a href="http://www.bgs.ac.uk/research/groundwater/health/arsenic/Bangladesh/data.html"
+        target="_blank" class="class1">British Geological Survey</a></li>
+        <li>Basemap from <a href="https://gadm.org/download_country_v3.html" target="_blank" class="class1">GADM</a></li>
+        <li>Full code and map details on <a href="https://github.com/jfobrycki/bgd-waterquality" target="_blank" class="class1">GitHub</a></li>
+      <li>Initial map made August 2020<br>MAP 675 in <a href="https://newmapsplus.as.uky.edu/" target="_blank"
+        class="class1">New Maps Plus program</a></li>
+        </ul>
+</div>
 
 
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
